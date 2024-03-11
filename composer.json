@@ -3,7 +3,10 @@
     "license": "shareware",
     "autoload": {
         "psr-4": {
-            "SushiMarket\\Sbertips\\": "src/"
+            "App\\": "app/",
+            "Database\\Factories\\": "database/factories/",
+            "Database\\Seeders\\": "database/seeders/",
+            "SushiMarket\\Sbertips\\": "packages/sushi-market/sbertips/src/"
         }
     },
     "authors": [
