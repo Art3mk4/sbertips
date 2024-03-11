@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 
 class SbertipsController
 {
-	public function __invoke() {
-		dd($this);
+	public function index()
+    {
+		return response('test index', 200)->header('Content-Type', 'text/plain');
 	}
 }
