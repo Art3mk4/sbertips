@@ -1,6 +1,6 @@
 <?php
 
-namespace SuschiMarket\Sbertips\Providers;
+namespace SushiMarket\Sbertips\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
