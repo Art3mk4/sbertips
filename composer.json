@@ -1,0 +1,16 @@
+{
+    "name": "sushi-market/sbertips",
+    "license": "shareware",
+    "autoload": {
+        "psr-4": {
+            "SushiMarket\\Sbertips\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "artem",
+            "email": "art3mk4@gmail.com"
+        }
+    ],
+    "require": {}
+}
