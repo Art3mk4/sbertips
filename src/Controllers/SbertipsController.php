@@ -9,6 +9,6 @@ class SbertipsController extends Controller
 {
 	public function index()
     {
-		return response(json_encode(config('app.sbertips')), 200)->header('Content-Type', 'text/plain');
+		return response(json_encode(config('sbertips')), 200)->header('Content-Type', 'text/plain');
 	}
 }
