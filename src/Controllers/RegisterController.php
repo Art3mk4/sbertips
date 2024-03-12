@@ -4,8 +4,9 @@ namespace SushiMarket\Sbertips\Controllers;
 
 use App\Http\Controllers\Controller;
 use SushiMarket\Sbertips\Requests\AuthOtpRequest;
-use SushiMarket\Sbertips\Services\SbertipsService\RegisterTips;
 use SushiMarket\Sbertips\Requests\ClientCreateRequest;
+use SushiMarket\Sbertips\Services\SbertipsService\RegisterTips;
+
 
 class RegisterController extends Controller
 {

@@ -2,6 +2,8 @@
 
 namespace SushiMarket\Sbertips\Services\SbertipsService;
 
+use Illuminate\Support\Facades\Http;
+
 class RegisterTips extends SberServiceRequest
 {
 

@@ -24,9 +24,9 @@ class ClientCreateRequest extends FormRequest
             'merchantLogin' => 'required|string',
             'firstName'     => 'required|string',
             'lastName'      => 'required|string',
-            'gender'        => 'required|string|in:MALE,FEMALE',
+            'gender'        => 'string|in:MALE,FEMALE',
             'email'         => 'required|email',
-            'phone'         => 'numeric|min:11|max:11'
+            'phone'         => 'required|string|size:10'
         ];
     }
 }
