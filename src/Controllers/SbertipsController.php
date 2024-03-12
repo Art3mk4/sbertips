@@ -9,6 +9,6 @@ class SbertipsController extends Controller
 {
 	public function index()
     {
-		return response('test index', 200)->header('Content-Type', 'text/plain');
+		return response('test index test', 200)->header('Content-Type', 'text/plain');
 	}
 }
