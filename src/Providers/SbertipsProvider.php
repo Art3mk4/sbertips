@@ -1,19 +1,25 @@
 <?php
 
 namespace SushiMarket\Sbertips\Providers;
-
 use Illuminate\Support\ServiceProvider;
 
 class SbertipsProvider extends ServiceProvider
 {
 
-	public function register()
-	{
-
+    /**
+     * @return void
+     */
+	public function register(): void
+    {
+        $this->mergeConfigFrom(__DIR__ . '/../config/auth.php');
 	}
 
-	public function boot()
-	{
+    /**
+     * @return void
+     */
+	public function boot(): void
+    {
+        $this->loadMigrationsFrom(__DIR__ . '/Migrations');
 		$this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
 	}
 	
