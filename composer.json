@@ -12,5 +12,12 @@
             "email": "art3mk4@gmail.com"
         }
     ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "SushiMarket\\Sbertips\\Providers\\SbertipsProvider"
+            ]
+        }
+    },
     "require": {}
 }
