@@ -4,7 +4,8 @@
     "autoload": {
         "psr-4": {
             "SushiMarket\\Sbertips\\": "src/"
-        }
+        },
+        "classmap": ["src/"]
     },
     "authors": [
         {
@@ -12,12 +13,14 @@
             "email": "art3mk4@gmail.com"
         }
     ],
+    "require": {
+        "php": "^8.2"
+    },
     "extra": {
         "laravel": {
             "providers": [
                 "SushiMarket\\Sbertips\\Providers\\SbertipsProvider"
             ]
         }
-    },
-    "require": {}
+    }
 }
