@@ -11,7 +11,7 @@ class SbertipsProvider extends ServiceProvider
      */
 	public function register(): void
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config/auth.php');
+        $this->mergeConfigFrom(__DIR__ . '/../config/auth.php', 'sbertips');
 	}
 
     /**
