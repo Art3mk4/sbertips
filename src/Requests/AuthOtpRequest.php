@@ -4,11 +4,10 @@ namespace SushiMarket\Sbertips\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ClientCreateRequest extends FormRequest
+class AuthOtpRequest extends FormRequest
 {
-
     /**
-     * @return true
+     * @return bool
      */
     public function authorize(): bool
     {
@@ -22,11 +21,7 @@ class ClientCreateRequest extends FormRequest
     {
         return [
             'merchantLogin' => 'required|string',
-            'firstName'     => 'required|string',
-            'lastName'      => 'required|string',
-            'gender'        => 'required|string|in:MALE,FEMALE',
-            'email'         => 'required|email',
-            'phone'         => 'numeric|min:11|max:11'
+            'uuid'          => 'required|string|min:32'
         ];
     }
 }

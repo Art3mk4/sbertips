@@ -29,4 +29,12 @@ class SberServiceRequest extends Http
     {
         return self::getConfig()['accessToken'];
     }
+
+    /**
+     * @return string
+     */
+    public static function getMerchantLogin():string
+    {
+        return self::getConfig()['merchantLogin'];
+    }
 }

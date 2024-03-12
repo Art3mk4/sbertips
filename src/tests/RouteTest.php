@@ -17,4 +17,13 @@ class RouteTest extends TestCase
         $response = $this->get('/sbertips');
         $response->assertStatus(200);
     }
+
+    /**
+     * @return void
+     */
+    public function test_qrcode_list_route(): void
+    {
+        $response = $this->get('/qrcode/list');
+        $response->assertStatus(200);
+    }
 }
