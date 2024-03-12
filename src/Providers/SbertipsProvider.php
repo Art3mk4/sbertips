@@ -19,6 +19,9 @@ class SbertipsProvider extends ServiceProvider
      */
 	public function boot(): void
     {
+        $this->publishes([
+            __DIR__ . '/../config/auth.php' => config_path('sbertips.php')
+        ]);
         $this->loadMigrationsFrom(__DIR__ . '/Migrations');
 		$this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
 	}
