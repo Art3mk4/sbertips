@@ -14,7 +14,7 @@ class RegisterTips extends SberServiceRequest
         $response = Http::post(self::getUrl() . 'clients/create', $data);
         if ($response->json('status') === "SUCCESS" && isset($data['courier_id'])) {
             try {
-                $rider = RiderTips::create([
+                RiderTips::create([
                     'courier_id' => $data['courier_id'],
                     'uuid'       => $response->json('client.uuid')
                 ]);
