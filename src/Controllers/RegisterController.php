@@ -3,6 +3,7 @@
 namespace SushiMarket\Sbertips\Controllers;
 
 use App\Http\Controllers\Controller;
+use SushiMarket\Sbertips\Requests\AccessTokenRequest;
 use SushiMarket\Sbertips\Requests\AuthOtpRequest;
 use SushiMarket\Sbertips\Requests\ClientCreateRequest;
 use SushiMarket\Sbertips\Requests\AuthTokenRequest;
@@ -26,8 +27,8 @@ class RegisterController extends Controller
         return RegisterTips::authToken($request->all());
     }
 
-    public function clientsInfo()
+    public function clientsInfo(AccessTokenRequest $request)
     {
-        return RegisterTips::clientsInfo();
+        return RegisterTips::clientsInfo($request->input('accessToken'));
     }
 }

@@ -12,5 +12,5 @@ Route::group(['prefix' => 'sbertips'], function() {
     Route::post('/clients/info', [RegisterController::class, 'clientsInfo'])->name('clientsInfo');
 
 
-    Route::get('/qrcode/list', [QrCodeController::class, 'list'])->name('qrcodeList');
+    Route::post('/qrcode/list', [QrCodeController::class, 'list'])->name('qrcodeList');
 });

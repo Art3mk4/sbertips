@@ -20,7 +20,8 @@ class AuthTokenRequest extends FormRequest
     {
         return [
             'accessCode' => 'required|string',
-            'otp'        => 'required|string|size:4'
+            'otp'        => 'required|string|size:4',
+            'courier_id' => 'required|integer'
         ];
     }
 }

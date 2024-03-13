@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\Http;
 class QrCodeTips extends SberServiceRequest
 {
 
-    public static function list()
+    public static function list($accessToken)
     {
-        return response(Http::withToken(self::getAccessToken())->post(self::getUrl() . 'qrcode/list'));
+        return response(Http::withToken($accessToken)->post(self::getUrl() . 'qrcode/list'));
     }
 }

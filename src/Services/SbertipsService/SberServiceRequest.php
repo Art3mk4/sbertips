@@ -25,14 +25,6 @@ class SberServiceRequest extends Http
     /**
      * @return string
      */
-    public static function getAccessToken():string
-    {
-        return config('sbertips.accessToken');
-    }
-
-    /**
-     * @return string
-     */
     public static function getMerchantLogin():string
     {
         return config('sbertips.merchantLogin');

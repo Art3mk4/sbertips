@@ -12,7 +12,7 @@ class RegisterTips extends SberServiceRequest
     public static function clientsCreate($data)
     {
         $response = Http::post(self::getUrl() . 'clients/create', $data);
-        if ($response->json('status') === "SUCCESS" && isset($data['courier_id'])) {
+        if ($response->json('status') === "SUCCESS") {
             try {
                 RiderTips::create([
                     'courier_id' => $data['courier_id'],
@@ -43,11 +43,12 @@ class RegisterTips extends SberServiceRequest
                 'access_token' => $response->json('accessToken')
             ]);
         }
+
         return response($response);
     }
 
-    public static function clientsInfo()
+    public static function clientsInfo($accessToken)
     {
-        return response(Http::withToken(self::getAccessToken())->post(self::getUrl() . 'clients/info'));
+        return response(Http::withToken($accessToken)->post(self::getUrl() . 'clients/info'));
     }
 }

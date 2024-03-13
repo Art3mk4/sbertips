@@ -8,7 +8,7 @@ class ClientCreateRequest extends FormRequest
 {
 
     /**
-     * @return true
+     * @return bool
      */
     public function authorize(): bool
     {

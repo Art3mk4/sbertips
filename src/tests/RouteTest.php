@@ -4,6 +4,7 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use SushiMarket\Sbertips\Models\Riders;
+use SushiMarket\Sbertips\Models\RiderTips;
 use Tests\TestCase;
 
 class RouteTest extends TestCase
@@ -12,13 +13,31 @@ class RouteTest extends TestCase
     use WithFaker;
 
     /**
+     * @depends test_auth_token
      * @return void
      */
-    /*public function test_qrcode_list_route(): void
+    public function test_qrcode_list_route(): void
     {
-        $response = $this->get('/qrcode/list');
+        $response = $this->post('/sbertips/qrcode/list', ['accessToken' => RiderTips::all()->random()->access_token]);
         $response->assertStatus(200);
-    }*/
+        $response->assertJsonStructure([
+            'requestId',
+            'status',
+            'qrCodes' => [
+                'merchantLogin',
+                'title',
+                'jobPosition',
+                'uuid',
+                'company',
+                'limits' => [
+                    'minAmount',
+                    'maxAmount'
+                ],
+                'text',
+                'amounts'
+            ]
+        ]);
+    }
 
     /**
      * @return \Illuminate\Testing\TestResponse
@@ -82,6 +101,35 @@ class RouteTest extends TestCase
         ]);
 
         return $response;
+    }
+
+    /**
+     * @depends test_auth_otp
+     * @return void
+     */
+    public function test_client_info()
+    {
+        $response = $this->post('/sbertips/clients/info', ['accessToken' => RiderTips::all()->random()->access_token]);
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'requestId',
+            'status',
+            'client' => [
+                'uuid',
+                'createdDate',
+                'phone',
+                'email',
+                'firstName',
+                'lastName',
+                'gender',
+                'photoUuid'
+            ],
+            'card' => [
+                'bindingId',
+                'maskedPan',
+                'issuerBank'
+            ]
+        ]);
     }
 
     /**
