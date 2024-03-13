@@ -17,6 +17,11 @@ class RegisterTips extends SberServiceRequest
         return response(Http::post(self::getUrl() . 'auth/otp', $data));
     }
 
+    public static function authToken($data)
+    {
+        return response(Http::post(self::getUrl() . 'auth/token', $data));
+    }
+
     public static function clientsInfo()
     {
         return response(Http::withToken(self::getAccessToken())->post(self::getUrl() . 'clients/info'));

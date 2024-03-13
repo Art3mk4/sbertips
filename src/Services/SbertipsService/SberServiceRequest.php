@@ -19,7 +19,7 @@ class SberServiceRequest extends Http
      */
     public static function getUrl():string
     {
-        return self::getConfig()['url'];
+        return config('sbertips.url');
     }
 
     /**
@@ -27,7 +27,7 @@ class SberServiceRequest extends Http
      */
     public static function getAccessToken():string
     {
-        return self::getConfig()['accessToken'];
+        return config('sbertips.accessToken');
     }
 
     /**
@@ -35,6 +35,6 @@ class SberServiceRequest extends Http
      */
     public static function getMerchantLogin():string
     {
-        return self::getConfig()['merchantLogin'];
+        return config('sbertips.merchantLogin');
     }
 }
