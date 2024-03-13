@@ -26,7 +26,8 @@ class ClientCreateRequest extends FormRequest
             'lastName'      => 'required|string',
             'gender'        => 'string|in:MALE,FEMALE',
             'email'         => 'required|email',
-            'phone'         => 'required|string|size:10'
+            'phone'         => 'required|string|size:10',
+            'courier_id'    => 'required|integer'
         ];
     }
 }

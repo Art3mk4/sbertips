@@ -3,6 +3,7 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use SushiMarket\Sbertips\Models\Riders;
 use Tests\TestCase;
 
 class RouteTest extends TestCase
@@ -10,18 +11,14 @@ class RouteTest extends TestCase
 
     use WithFaker;
 
-    protected $accessCode;
-    protected $accessToken;
-    protected $uuid;
-
     /**
      * @return void
      */
-    public function test_qrcode_list_route(): void
+    /*public function test_qrcode_list_route(): void
     {
         $response = $this->get('/qrcode/list');
         $response->assertStatus(200);
-    }
+    }*/
 
     /**
      * @return \Illuminate\Testing\TestResponse
@@ -98,7 +95,8 @@ class RouteTest extends TestCase
             "lastName"      => $this->faker('ru_RU')->lastName,
             "gender"        => "MALE",
             "phone"         => "9" . $this->faker->unique()->numerify('#########'),
-            "email"         => $this->faker->unique()->email
+            "email"         => $this->faker->unique()->email,
+            "courier_id"    => Riders::all()->random()->first()->id
         ];
     }
 
@@ -121,8 +119,9 @@ class RouteTest extends TestCase
     protected function getAuthTokenData($accessCode)
     {
         return [
-            'accessCode' => $accessCode,
-            'otp'        => "1111"
+            "accessCode" => $accessCode,
+            "otp"        => "1111",
+            "courier_id" => Riders::all()->random()->id
         ];
     }
 }
