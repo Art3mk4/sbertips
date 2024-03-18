@@ -5,6 +5,7 @@ use SushiMarket\Sbertips\Controllers\QrCodeController;
 use SushiMarket\Sbertips\Controllers\RegisterController;
 use SushiMarket\Sbertips\Controllers\SbertipsController;
 use SushiMarket\Sbertips\Controllers\CardController;
+use SushiMarket\Sbertips\Controllers\TransferController;
 
 Route::group(['prefix' => 'sbertips'], function() {
     Route::post('/clients/create', [RegisterController::class, 'clientsCreate'])->name('clientsCreate');
@@ -22,4 +23,8 @@ Route::group(['prefix' => 'sbertips'], function() {
     Route::post('/card/list', [CardController::class, 'list'])->name('cardList');
     Route::post('/card/active', [CardController::class, 'active'])->name('cardActive');
     Route::post('/card/delete', [CardController::class, 'delete'])->name('cardDelete');
+
+    Route::post('/transfer/secure/register', [TransferController::class, 'secureRegister'])->name('secureRegister');
+    Route::post('/transfer/secure/finish', [TransferController::class, 'secureFinish'])->name('secureFinish');
+    Route::post('/transfer/payment', [TransferController::class, 'payment'])->name('payment');
 });

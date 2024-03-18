@@ -29,4 +29,12 @@ class SberServiceRequest extends Http
     {
         return config('sbertips.merchantLogin');
     }
+
+    /**
+     * @return string
+     */
+    public static function getPassword():string
+    {
+        return config('sbertips.merchantPassword');
+    }
 }

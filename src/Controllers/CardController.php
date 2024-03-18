@@ -7,33 +7,33 @@ use SushiMarket\Sbertips\Requests\CardActiveRequest;
 use SushiMarket\Sbertips\Requests\SaveCardFinishRequest;
 use SushiMarket\Sbertips\Requests\SaveCardStartRequest;
 use SushiMarket\Sbertips\Requests\AccessTokenRequest;
-use SushiMarket\Sbertips\Services\SbertipsService\CourierCardTips;
+use SushiMarket\Sbertips\Services\SbertipsService\CourierCardTip;
 
 class CardController extends Controller
 {
 
     public function saveStart(SaveCardStartRequest $request)
     {
-        return CourierCardTips::saveStart($request->all());
+        return CourierCardTip::saveStart($request->all());
     }
 
     public function saveFinish(SaveCardFinishRequest $request)
     {
-        return CourierCardTips::saveFinish($request->all());
+        return CourierCardTip::saveFinish($request->all());
     }
 
     public function active(CardActiveRequest $request)
     {
-        return CourierCardTips::active($request->all());
+        return CourierCardTip::active($request->all());
     }
 
     public function delete(CardActiveRequest $request)
     {
-        return CourierCardTips::delete($request->all());
+        return CourierCardTip::delete($request->all());
     }
 
     public function list(AccessTokenRequest $request)
     {
-        return CourierCardTips::list($request->input('accessToken'));
+        return CourierCardTip::list($request->input('accessToken'));
     }
 }
