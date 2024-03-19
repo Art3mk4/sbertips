@@ -31,12 +31,4 @@ class CourierCardTip extends SberServiceRequest
     {
         return response(Http::withToken($accessToken)->post(self::getUrl() . 'card/list'));
     }
-
-    /**
-     * @return string
-     */
-    public static function getUrl():string
-    {
-        return 'https://pay.mysbertips.ru/sbrftips-proxy/api/';
-    }
 }

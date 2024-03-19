@@ -27,12 +27,4 @@ class PaymentTip extends SberServiceRequest
         $data['credentials']['password'] = self::getPassword();
         return response(Http::withHeaders(['X-bank-id' => 'GENERAL'])->post(self::getUrl() . 'transfer/payment', $data));
     }
-
-    /**
-     * @return string
-     */
-    public static function getUrl():string
-    {
-        return 'https://pay.mysbertips.ru/sbrftips-proxy/api/';
-    }
 }

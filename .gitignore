@@ -1,6 +1,5 @@
 composer.phar
 /vendor/
-/src/config/auth.php
 # User-specific stuff
 .idea/**/workspace.xml
 .idea/**/tasks.xml
