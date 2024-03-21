@@ -12,6 +12,8 @@ class SbertipsProvider extends ServiceProvider
 	public function register(): void
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/auth.php', 'sbertips');
+        app()->register(SbertipsRouteServiceProvider::class);
+        app()->register(SbertipsAuthServiceProvider::class);
 	}
 
     /**
@@ -22,7 +24,7 @@ class SbertipsProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../config/auth.php' => config_path('sbertips.php')
         ]);
+
         $this->loadMigrationsFrom(__DIR__ . '/../Migrations');
-		$this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
 	}
 }

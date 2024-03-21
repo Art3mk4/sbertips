@@ -7,7 +7,7 @@ use SushiMarket\Sbertips\Controllers\SbertipsController;
 use SushiMarket\Sbertips\Controllers\CardController;
 use SushiMarket\Sbertips\Controllers\TransferController;
 
-Route::group(['prefix' => 'sbertips'], function() {
+Route::prefix('sbertips')->middleware(['auth:sbertips_auth'])->group(function() {
     Route::post('/clients/create', [RegisterController::class, 'clientsCreate'])->name('clientsCreate');
     Route::post('/auth/otp', [RegisterController::class, 'authOtp'])->name('authOtp');
     Route::post('/auth/token', [RegisterController::class, 'authToken'])->name('authToken');
