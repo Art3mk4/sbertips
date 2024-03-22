@@ -3,7 +3,7 @@
 namespace SushiMarket\Sbertips\Requests;
 
 use Illuminate\Contracts\Validation\Validator;
-use App\Foundation\Http\FormRequest;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 
