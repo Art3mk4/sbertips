@@ -13,7 +13,6 @@ class SbertipsProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/auth.php', 'sbertips');
         app()->register(SbertipsRouteServiceProvider::class);
-        app()->register(SbertipsAuthServiceProvider::class);
 	}
 
     /**

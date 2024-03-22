@@ -1,9 +1,9 @@
 <?php
 
 namespace SushiMarket\Sbertips\Requests;
-use Illuminate\Foundation\Http\FormRequest;
+use SushiMarket\Sbertips\Requests\BaseAjaxRequest;
 
-class TransferSecureFinishRequest extends FormRequest
+class TransferSecureFinishRequest extends BaseAjaxRequest
 {
     public function authorize()
     {

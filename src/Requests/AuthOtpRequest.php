@@ -1,10 +1,9 @@
 <?php
 
 namespace SushiMarket\Sbertips\Requests;
+use SushiMarket\Sbertips\Requests\BaseAjaxRequest;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class AuthOtpRequest extends FormRequest
+class AuthOtpRequest extends BaseAjaxRequest
 {
     /**
      * @return bool

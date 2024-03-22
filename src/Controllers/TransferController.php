@@ -1,8 +1,6 @@
 <?php
-
 namespace SushiMarket\Sbertips\Controllers;
 
-use Faker\Provider\Payment;
 use Illuminate\Routing\Controller;
 use SushiMarket\Sbertips\Requests\TransferPaymentRequest;
 use SushiMarket\Sbertips\Requests\TransferSecureFinishRequest;
@@ -11,18 +9,37 @@ use SushiMarket\Sbertips\Services\SbertipsService\PaymentTip;
 
 class TransferController extends Controller
 {
+
+    /**
+     * secureRegister
+     *
+     * @param TransferSecureRegisterRequest $request
+     * @return array|mixed
+     */
     public function secureRegister(TransferSecureRegisterRequest $request)
     {
-        return PaymentTip::transferSecureRegister($request->all());
+        return PaymentTip::transferSecureRegister($request->all())->json();
     }
 
+    /**
+     * secureFinish
+     *
+     * @param TransferSecureFinishRequest $request
+     * @return array|mixed
+     */
     public function secureFinish(TransferSecureFinishRequest $request)
     {
-        return PaymentTip::transferSecureFinish($request->all());
+        return PaymentTip::transferSecureFinish($request->all())->json();
     }
 
+    /**
+     * payment
+     *
+     * @param TransferPaymentRequest $request
+     * @return array|mixed
+     */
     public function payment(TransferPaymentRequest $request)
     {
-        return PaymentTip::transferPayment($request->all());
+        return PaymentTip::transferPayment($request->all())->json();
     }
 }

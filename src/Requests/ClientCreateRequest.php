@@ -2,9 +2,9 @@
 
 namespace SushiMarket\Sbertips\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use SushiMarket\Sbertips\Requests\BaseAjaxRequest;
 
-class ClientCreateRequest extends FormRequest
+class ClientCreateRequest extends BaseAjaxRequest
 {
 
     /**

@@ -19,14 +19,18 @@ class RouteTest extends TestCase
     protected $accessToken;
     protected $transactionNumber;
     protected $qrcodeId;
+    protected $courierId;
 
     public function setUp():void
     {
         parent::setUp();
-        $riderTip = RiderTip::all()->random();
-        $this->accessToken = $riderTip->access_token;
-        $this->qrcodeId = $riderTip->qrcode_id;
-        $this->transactionNumber = 'transactionNumber23';
+        if (RiderTip::count()) {
+            $riderTip = RiderTip::all()->random();
+            $this->accessToken = $riderTip->access_token;
+            $this->qrcodeId = $riderTip->qrcode_id;
+            $this->courierId = $riderTip->courier_id;
+            $this->transactionNumber = 'transactionNumber23';
+        }
     }
 
     /**
@@ -34,7 +38,7 @@ class RouteTest extends TestCase
      */
     public function test_client_register()
     {
-        $response = $this->post('/sbertips/clients/create', $this->getClientData());
+        $response = $this->postRequest('/sbertips/clients/create', $this->getClientData());
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'requestId',
@@ -62,7 +66,7 @@ class RouteTest extends TestCase
      */
     public function test_auth_otp($data)
     {
-        $response = $this->post('/sbertips/auth/otp', $this->getAuthOtpData($data->json('client.uuid')));
+        $response = $this->postRequest('/sbertips/auth/otp', $this->getAuthOtpData($data->json('client.uuid')));
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'requestId',
@@ -82,7 +86,7 @@ class RouteTest extends TestCase
      */
     public function test_auth_token($data)
     {
-        $response = $this->post('/sbertips/auth/token', $this->getAuthTokenData($data->json('accessCode')));
+        $response = $this->postRequest('/sbertips/auth/token', $this->getAuthTokenData($data->json('accessCode')));
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'requestId',
@@ -99,7 +103,7 @@ class RouteTest extends TestCase
      */
     public function test_client_info()
     {
-        $response = $this->post('/sbertips/clients/info', ['accessToken' => $this->accessToken]);
+        $response = $this->postRequest('/sbertips/clients/info', ['accessToken' => $this->accessToken]);
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'requestId',
@@ -128,7 +132,7 @@ class RouteTest extends TestCase
      */
     public function test_qrcode_add()
     {
-        $response = $this->post('/sbertips/qrcode/add', $this->getQrCodeData());
+        $response = $this->postRequest('/sbertips/qrcode/add', $this->getQrCodeData());
         $response->assertStatus(200);
         $response->assertJsonStructure($this->getQrCodeUpdateStructure());
 
@@ -142,7 +146,7 @@ class RouteTest extends TestCase
      */
     public function test_qrcode_update($data)
     {
-        $response = $this->post(
+        $response = $this->postRequest(
             '/sbertips/qrcode/update',
             array_merge(
                 ['uuid' => $data->json('qrCode.uuid')],
@@ -160,7 +164,7 @@ class RouteTest extends TestCase
      */
     public function test_qrcode_delete($data)
     {
-        $response = $this->post(
+        $response = $this->postRequest(
             '/sbertips/qrcode/delete',
             [
                 'uuid'        => $data->json('qrCode.uuid'),
@@ -181,7 +185,7 @@ class RouteTest extends TestCase
      */
     public function test_qrcode_list(): void
     {
-        $response = $this->post('/sbertips/qrcode/list', ['accessToken' => $this->accessToken]);
+        $response = $this->postRequest('/sbertips/qrcode/list', ['accessToken' => $this->accessToken]);
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'requestId',
@@ -197,7 +201,7 @@ class RouteTest extends TestCase
      */
     public function test_save_card_start_with_card_data()
     {
-        $response = $this->post('/sbertips/savecard/start', $this->getSaveCardData());
+        $response = $this->postRequest('/sbertips/savecard/start', $this->getSaveCardData());
         $response->assertStatus(200);
         $response->assertJsonStructure($this->getSaveCardStartStructure());
         return $response;
@@ -208,7 +212,7 @@ class RouteTest extends TestCase
      */
     public function test_save_card_start_without_card_data()
     {
-        $response = $this->post('/sbertips/savecard/start', $this->getSaveCardWithoutData());
+        $response = $this->postRequest('/sbertips/savecard/start', $this->getSaveCardWithoutData());
         $response->assertStatus(200);
         $response->assertJsonStructure($this->getSaveCardStartStructure());
         return $response;
@@ -221,7 +225,7 @@ class RouteTest extends TestCase
      */
     public function test_save_card_finish($data)
     {
-        $response = $this->post('/sbertips/savecard/finish', [
+        $response = $this->postRequest('/sbertips/savecard/finish', [
             'accessToken'       => $this->accessToken,
             'mdOrder'           => $data->json('mdOrder'),
             'transactionNumber' => $this->transactionNumber,
@@ -241,7 +245,7 @@ class RouteTest extends TestCase
      */
     public function test_save_card_finish_without_card_data($data)
     {
-        $response = $this->post('/sbertips/savecard/finish', [
+        $response = $this->postRequest('/sbertips/savecard/finish', [
             'accessToken' => $this->accessToken,
             'mdOrder' => $data->json('mdOrder'),
             'transactionNumber' => $this->transactionNumber
@@ -255,7 +259,7 @@ class RouteTest extends TestCase
 
     public function test_card_list()
     {
-        $response = $this->post('/sbertips/card/list', [
+        $response = $this->postRequest('/sbertips/card/list', [
             'accessToken' => $this->accessToken
         ]);
         $response->assertStatus(200);
@@ -285,7 +289,7 @@ class RouteTest extends TestCase
     public function test_card_active($data)
     {
         $card = $this->faker->randomElement($data->json('cardList'));
-        $response = $this->post('/sbertips/card/active', [
+        $response = $this->postRequest('/sbertips/card/active', [
             'accessToken' => $this->accessToken,
             'bindingId'   => $card['bindingId']
         ]);
@@ -308,7 +312,7 @@ class RouteTest extends TestCase
         $this->assertTrue(true);
         return ;
         $card = $this->faker->randomElement($data->json('cardList'));
-        $response = $this->post('/sbertips/card/delete', [
+        $response = $this->postRequest('/sbertips/card/delete', [
             'accessToken' => $this->accessToken,
             'bindingId'   => $card['bindingId']
         ]);
@@ -328,7 +332,7 @@ class RouteTest extends TestCase
      */
     public function test_transfer_secure_register($data)
     {
-        $response = $this->post('/sbertips/transfer/secure/register', $this->getTransferSecureRegisterData($data));
+        $response = $this->postRequest('/sbertips/transfer/secure/register', $this->getTransferSecureRegisterData($data));
         $response->assertStatus(200);
         $response->assertJsonStructure([
            'requestId',
@@ -356,7 +360,7 @@ class RouteTest extends TestCase
      */
     public function test_transfer_payment($data)
     {
-        $response = $this->post('sbertips/transfer/payment', $this->getTransferPaymentData($data->json()));
+        $response = $this->postRequest('sbertips/transfer/payment', $this->getTransferPaymentData($data->json()));
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'requestId',
@@ -386,7 +390,7 @@ class RouteTest extends TestCase
      */
     public function test_transfer_secure_finish($data)
     {
-        $response = $this->post('sbertips/transfer/secure/finish', $this->getTransferSecureFinishData($data->json()));
+        $response = $this->postRequest('sbertips/transfer/secure/finish', $this->getTransferSecureFinishData($data->json()));
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'requestId',
@@ -401,6 +405,18 @@ class RouteTest extends TestCase
         $this->assertEquals($response->json('transactionState'), 'DEPOSITED');
         $this->assertEquals($response->json('state'), 'FINISH_SUCCESS');
         $this->assertEquals($response->json('type'), 'TRANSFER');
+    }
+
+    /**
+     * postRequest
+     *
+     * @param $url
+     * @param $data
+     * @return TestResponse
+     */
+    protected function postRequest($url, $data)
+    {
+        return $this->post($url, $data, ['Authorization' => 'Bearer ' . config('sbertips.auth.bearerToken')]);
     }
 
     /**
@@ -440,7 +456,7 @@ class RouteTest extends TestCase
         return [
             "accessCode" => $accessCode,
             "otp"        => "1111",
-            "courier_id" => Rider::all()->random()->id
+            "courier_id" => $this->courierId
         ];
     }
 
