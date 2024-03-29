@@ -16,6 +16,7 @@ Route::prefix('sbertips')->middleware(['sbertips_auth'])->group(function() {
     Route::post('/qrcode/add', [QrCodeController::class, 'add'])->name('qrcodeAdd');
     Route::post('/qrcode/update', [QrCodeController::class, 'update'])->name('qrcodeUpdate');
     Route::post('/qrcode/delete', [QrCodeController::class, 'delete'])->name('qrcodeDelete');
+    Route::post('/qrcode/get', [QrCodeController::class, 'get'])->name('qrcodeGet');
     Route::post('/qrcode/list', [QrCodeController::class, 'list'])->name('qrcodeList');
 
     Route::post('/savecard/start', [CardController::class, 'saveStart'])->name('saveStart');

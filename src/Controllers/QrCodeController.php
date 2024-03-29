@@ -45,6 +45,17 @@ class QrCodeController extends Controller
     }
 
     /**
+     * get
+     *
+     * @param QrCodeGetRequest $request
+     * @return array|mixed
+     */
+    public function get(QrCodeGetRequest $request)
+    {
+        return QrCodeTip::get($request->all())->json();
+    }
+
+    /**
      * list
      *
      * @param AccessTokenRequest $request

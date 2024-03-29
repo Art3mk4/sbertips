@@ -55,6 +55,23 @@ class QrCodeTip extends SberServiceRequest
     }
 
     /**
+     * get
+     *
+     * @param $data
+     * @return PromiseInterface|Response
+     */
+    public static function get($data)
+    {
+        return Http::withToken($data['accessToken'])->post(
+            self::getUrl() . 'qrcode/get',
+            [
+                'uuid' => $data['uuid']
+            ]
+        );
+    }
+
+
+    /**
      * list
      *
      * @param $accessToken
