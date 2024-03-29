@@ -4,6 +4,7 @@ namespace SushiMarket\Sbertips\Controllers;
 use Illuminate\Routing\Controller;
 use SushiMarket\Sbertips\Requests\AccessTokenRequest;
 use SushiMarket\Sbertips\Requests\QrCodeDeleteRequest;
+use SushiMarket\Sbertips\Requests\QrCodeGetRequest;
 use SushiMarket\Sbertips\Requests\QrCodeRequest;
 use SushiMarket\Sbertips\Requests\QrCodeUpdateRequest;
 use SushiMarket\Sbertips\Services\SbertipsService\QrCodeTip;
