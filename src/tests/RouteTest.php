@@ -180,6 +180,28 @@ class RouteTest extends TestCase
     }
 
     /**
+     * @param $data
+     * @return void
+     * @depends test_qrcode_add
+     */
+    public function test_qrcode_get($data)
+    {
+        $response = $this->postRequest(
+            '/sbertips/qrcode/get',
+            [
+                'uuid' => $this->qrcodeId,
+                'accessToken' => $this->accessToken
+            ]
+        );
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'requestId',
+            'status'
+        ]);
+        $this->assertEquals($response->json('status'), 'SUCCESS');
+    }
+
+    /**
      * @depends test_qrcode_add
      * @return void
      */
@@ -543,7 +565,7 @@ class RouteTest extends TestCase
     protected function getTransferSecureRegisterData($data)
     {
         return [
-            "transactionNumber" => "d472e71a-7ca8-4869-8e46-1f92a2pr",
+            "transactionNumber" => Str::uuid()->toString(),//"d472e71a-7ca8-4869-8e46-1f92a2pr",
             "qrUuid"            => $this->qrcodeId,
             "amount"            => 10000,
             "currency"          => "643",

@@ -3,6 +3,7 @@ namespace SushiMarket\Sbertips\Services\SbertipsService;
 
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use SushiMarket\Sbertips\Models\RiderTip;
 use Illuminate\Http\Client\Response;
 use GuzzleHttp\Promise\PromiseInterface;
@@ -56,11 +57,15 @@ class RegisterTip extends SberServiceRequest
     {
         $response = Http::post(self::getUrl() . 'auth/token', $data);
         if ($response->status() === 200 && $response->json('status') === 'SUCCESS') {
-            RiderTip::where([
-                'courier_id' => $data['courier_id']
-            ])->update([
-                'access_token' => $response->json('accessToken')
-            ]);
+            try {
+                RiderTip::where([
+                    'courier_id' => $data['courier_id']
+                ])->update([
+                    'access_token' => $response->json('accessToken')
+                ]);
+            } catch (UniqueConstraintViolationException $e) {
+                Log::error($e->getMessage(), $data);
+            }
         }
 
         return $response;
