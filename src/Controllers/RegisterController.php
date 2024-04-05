@@ -3,7 +3,6 @@ namespace SushiMarket\Sbertips\Controllers;
 
 use Illuminate\Routing\Controller;
 use Nyholm\Psr7\Request;
-use SushiMarket\Sbertips\Models\ResponseStatus;
 use SushiMarket\Sbertips\Requests\AccessTokenRequest;
 use SushiMarket\Sbertips\Requests\AuthOtpRequest;
 use SushiMarket\Sbertips\Requests\ClientCreateRequest;
