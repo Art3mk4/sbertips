@@ -550,7 +550,7 @@ class RouteTest extends TestCase
             "gender"        => "MALE",
             "phone"         => "9" . $this->faker->unique()->numerify('#########'),
             "email"         => $this->faker->unique()->email,
-            "courier_id"    => Rider::all()->random()->first()->id
+            "courier_id"    => ModelFactory::getRiderModel()::all()->random()->first()->id
         ];
     }
 
