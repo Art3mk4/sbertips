@@ -37,4 +37,17 @@ class SberServiceRequest extends Http
     {
         return config('sbertips.merchantPassword');
     }
+
+    /**
+     * @return array[]
+     */
+    public static function getData(): array
+    {
+        return [
+            'credentials' => [
+                'login'     => self::getMerchantLogin(),
+                'password'  => self::getPassword()
+            ]
+        ];
+    }
 }

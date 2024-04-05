@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use SushiMarket\Sbertips\Services\SbertipsService\ModelFactory;
 
 class RiderTip extends Model
 {
@@ -25,6 +26,6 @@ class RiderTip extends Model
      */
     public function rider()
     {
-        return $this->belongsTo(Rider::class);
+        return $this->belongsTo(ModelFactory::getRiderModel()::class, 'courier_id');
     }
 }

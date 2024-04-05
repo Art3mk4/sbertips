@@ -5,6 +5,7 @@ use Illuminate\Routing\Controller;
 use SushiMarket\Sbertips\Requests\TransferPaymentRequest;
 use SushiMarket\Sbertips\Requests\TransferSecureFinishRequest;
 use SushiMarket\Sbertips\Requests\TransferSecureRegisterRequest;
+use SushiMarket\Sbertips\Requests\SbertipsPaymentRequest;
 use SushiMarket\Sbertips\Services\SbertipsService\PaymentTip;
 
 class TransferController extends Controller
@@ -41,5 +42,10 @@ class TransferController extends Controller
     public function payment(TransferPaymentRequest $request)
     {
         return PaymentTip::transferPayment($request->all())->json();
+    }
+
+    public function sbertipsPayment(SbertipsPaymentRequest $request)
+    {
+        return PaymentTip::sbertipsPayment($request->all())->json();
     }
 }

@@ -8,6 +8,9 @@ use SushiMarket\Sbertips\Controllers\CardController;
 use SushiMarket\Sbertips\Controllers\TransferController;
 
 Route::prefix('sbertips')->middleware(['sbertips_auth'])->group(function() {
+    Route::post('/client/registerStart', [RegisterController::class, 'registerStart'])->name('clientRegisterStart');
+    Route::post('/client/registerFinish', [RegisterController::class, 'registerFinish'])->name('clientRegisterFinish');
+
     Route::post('/clients/create', [RegisterController::class, 'clientsCreate'])->name('clientsCreate');
     Route::post('/auth/otp', [RegisterController::class, 'authOtp'])->name('authOtp');
     Route::post('/auth/token', [RegisterController::class, 'authToken'])->name('authToken');
@@ -24,7 +27,9 @@ Route::prefix('sbertips')->middleware(['sbertips_auth'])->group(function() {
     Route::post('/card/list', [CardController::class, 'list'])->name('cardList');
     Route::post('/card/active', [CardController::class, 'active'])->name('cardActive');
     Route::post('/card/delete', [CardController::class, 'delete'])->name('cardDelete');
+    Route::post('/check/orders', [CardController::class, 'checkOrders'])->name('checkOrdersForTip');
 
+    Route::post('/transferPayment', [TransferController::class, 'sbertipsPayment'])->name('sbertipsPayment');
     Route::post('/transfer/secure/register', [TransferController::class, 'secureRegister'])->name('secureRegister');
     Route::post('/transfer/secure/finish', [TransferController::class, 'secureFinish'])->name('secureFinish');
     Route::post('/transfer/payment', [TransferController::class, 'payment'])->name('payment');

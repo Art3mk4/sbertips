@@ -1,36 +1,47 @@
 <?php
 namespace Tests\Feature;
 
+use App\Models\Order\OrderStatus;
 use Illuminate\Support\Str;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use SushiMarket\Sbertips\Models\Rider;
 use SushiMarket\Sbertips\Models\RiderTip;
 use Illuminate\Testing\TestResponse;
 use SushiMarket\Sbertips\Requests\QrCodeRequest;
-use SushiMarket\Sbertips\Services\SbertipsService\SberServiceRequest;
+use SushiMarket\Sbertips\Services\SbertipsService\ModelFactory;
 use Tests\TestCase;
 
 class RouteTest extends TestCase
 {
 
-    use WithFaker;
+    use WithFaker, DatabaseTransactions;
 
     protected $accessToken;
     protected $transactionNumber;
     protected $qrcodeId;
     protected $courierId;
+    protected $orderModel;
 
     public function setUp():void
     {
         parent::setUp();
+
+        $orderModel = ModelFactory::getOrderModel()::where([
+            'OrderType' => 1,
+            'status' => 12
+        ])->first();
         if (RiderTip::count()) {
             $riderTip = RiderTip::all()->random();
             $this->accessToken = $riderTip->access_token;
             $this->qrcodeId = $riderTip->qrcode_id;
             $this->courierId = $riderTip->courier_id;
-            $this->transactionNumber = 'transactionNumber23';
+            $orderModel->CourierID = $this->courierId;
+            $this->transactionNumber = 'transactionNumber23'; //'d472e71a-7c8-4869-8e56-1f92a2pr'
+            $orderModel->save();
         }
+        $this->orderModel = $orderModel;
     }
 
     /**
@@ -429,6 +440,92 @@ class RouteTest extends TestCase
         $this->assertEquals($response->json('type'), 'TRANSFER');
     }
 
+    public function test_check_orders_for_tip()
+    {
+        $response = $this->postRequest(
+            'sbertips/check/orders',
+            [
+                'order_ids' => [$this->orderModel->id]
+            ]
+        );
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'status',
+            'orders' => [
+                '*' => [
+                    'order_id',
+                    'courier_id',
+                    'sbertip' => [
+                        'id',
+                        'uuid',
+                        'access_token',
+                        'courier_id',
+                        'qrcode_id',
+                        'saved_card',
+                        'created_at',
+                        'updated_at'
+                    ]
+                ]
+            ]
+        ]);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_client_register_start()
+    {
+        $response = $this->postRequest('sbertips/client/registerStart', $this->getClientData());
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'requestId',
+            'status',
+            'accessCode',
+            'newOtpDelay',
+            'attemptsLeft'
+        ]);
+
+        return $response;
+    }
+
+    /**
+     * @param $data
+     * @depends test_client_register_start
+     * @return void
+     */
+    public function test_client_register_finish($data)
+    {
+
+        $response = $this->postRequest('sbertips/client/registerFinish', $this->getAuthTokenData($data->json('accessCode')));
+        $response->assertStatus(200);
+        $response->assertJsonStructure($this->getQrCodeUpdateStructure());
+    }
+
+    public function test_sbertips_payment()
+    {
+        $response = $this->postRequest('sbertips/transferPayment', $this->getOrderData());
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'requestId',
+            'status',
+            'transactionNumber',
+            'mdOrder',
+            'info',
+            'redirectUrl',
+            'paReq',
+            'transactionState',
+            'state',
+            'type',
+            'errorMessage'
+        ]);
+        $this->assertEquals($response->json('status'), 'SUCCESS');
+        $this->assertEquals($response->json('transactionState'), 'CREATED');
+        $this->assertEquals($response->json('state'), 'PERFORM_SUCCESS');
+        $this->assertEquals($response->json('type'), 'TRANSFER');
+        $this->assertEquals($response->json('errorMessage'), null);
+    }
+
     /**
      * postRequest
      *
@@ -494,9 +591,9 @@ class RouteTest extends TestCase
             'company' => $this->faker->company,
             'text' => $this->faker->text,
             'amounts' => [
-                100,
-                500,
-                1000
+                10000,
+                50000,
+                100000
             ]
         ];
     }
@@ -629,6 +726,21 @@ class RouteTest extends TestCase
             'state',
             'type',
             'errorMessage'
+        ];
+    }
+
+    protected function getOrderData()
+    {
+        return [
+            "order_id"          => $this->orderModel->id,
+            "transactionNumber" => Str::uuid()->toString(),//"d472e71a-7ca8-4869-8e46-1f92a2pr",
+            "amount"            => 10000,
+            "currency"          => "643",
+            "binding"           => [
+                "bindingId" => Str::uuid()->toString(),
+                "clientId"  => Str::uuid()->toString()
+            ],
+            "feeSender" => false
         ];
     }
 }

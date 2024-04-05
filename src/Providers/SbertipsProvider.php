@@ -2,6 +2,8 @@
 
 namespace SushiMarket\Sbertips\Providers;
 use Illuminate\Support\ServiceProvider;
+use SushiMarket\Sbertips\Models\RiderTip;
+use SushiMarket\Sbertips\Services\SbertipsService\ModelFactory;
 
 class SbertipsProvider extends ServiceProvider
 {
@@ -25,5 +27,21 @@ class SbertipsProvider extends ServiceProvider
         ]);
 
         $this->loadMigrationsFrom(__DIR__ . '/../Migrations');
+        $this->loadRelations();
 	}
+
+    protected function loadRelations()
+    {
+        ModelFactory::getRiderModel()::class::resolveRelationUsing('sbertip', function($riderTipModel) {
+            return $riderTipModel->hasOne(RiderTip::class);
+        });
+
+        ModelFactory::getOrderModel()::class::resolveRelationUsing('sbertip', function($riderTipModel) {
+            return $riderTipModel->hasOne(RiderTip::class, 'courier_id', 'CourierID');
+        });
+
+        ModelFactory::getClientModel()::class::resolveRelationUsing('sbercard', function($clientModel) {
+            return $clientModel->hasOne(ModelFactory::getCardModel()::class, 'client_id', 'id');
+        });
+    }
 }

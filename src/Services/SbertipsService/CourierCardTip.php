@@ -4,6 +4,9 @@ namespace SushiMarket\Sbertips\Services\SbertipsService;
 use Illuminate\Support\Facades\Http;
 use GuzzleHttp\Promise\PromiseInterface;
 use Illuminate\Http\Client\Response;
+use Illuminate\Http\JsonResponse;
+use SushiMarket\Sbertips\Models\ResponseStatus;
+use SushiMarket\Sbertips\Models\RiderTip;
 
 class CourierCardTip extends SberServiceRequest
 {
@@ -27,7 +30,11 @@ class CourierCardTip extends SberServiceRequest
      */
     public static function saveFinish($data)
     {
-        return Http::withToken($data['accessToken'])->post(self::getUrl() . 'savecard/finish', $data);
+        $response = Http::withToken($data['accessToken'])->post(self::getUrl() . 'savecard/finish', $data);
+        if ($response->json('status') === ResponseStatus::SUCCESS->value) {
+            RiderTip::where('access_token', $data['accessToken'])->update(['saved_card' => true]);
+        }
+        return $response;
     }
 
     /**
@@ -61,5 +68,34 @@ class CourierCardTip extends SberServiceRequest
     public static function list($accessToken)
     {
         return Http::withToken($accessToken)->post(self::getUrl() . 'card/list');
+    }
+
+    /**
+     * checkOrders
+     *
+     * @param $data
+     * @return mixed
+     */
+    public static function checkOrders($data)
+    {
+        $orders = ModelFactory::getOrderModel()::select([
+            'id as order_id',
+            'CourierID'
+        ])->whereIn('id', $data)->with('sbertip')->get()->map(function($itemOrder) {
+            $itemOrder['courier_id'] = $itemOrder['CourierID'];
+            unset($itemOrder['CourierID']);
+            return $itemOrder;
+        });
+        $status = ResponseStatus::SUCCESS->value;
+        $responseStatus = 200;
+        if ($orders->count() === 0) {
+            $status = ResponseStatus::FAIL->value;
+            $responseStatus = 404;
+        }
+
+        return response()->json([
+            'status' => $status,
+            'orders' => $orders
+        ], $responseStatus);
     }
 }

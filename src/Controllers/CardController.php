@@ -3,6 +3,7 @@ namespace SushiMarket\Sbertips\Controllers;
 
 use Illuminate\Routing\Controller;
 use SushiMarket\Sbertips\Requests\CardActiveRequest;
+use SushiMarket\Sbertips\Requests\CheckOrdersRequest;
 use SushiMarket\Sbertips\Requests\SaveCardFinishRequest;
 use SushiMarket\Sbertips\Requests\SaveCardStartRequest;
 use SushiMarket\Sbertips\Requests\AccessTokenRequest;
@@ -64,5 +65,10 @@ class CardController extends Controller
     public function list(AccessTokenRequest $request)
     {
         return CourierCardTip::list($request->input('accessToken'))->json();
+    }
+
+    public function checkOrders(CheckOrdersRequest $request)
+    {
+        return CourierCardTip::checkOrders($request->input('order_ids'));
     }
 }

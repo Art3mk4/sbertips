@@ -2,6 +2,8 @@
 namespace SushiMarket\Sbertips\Controllers;
 
 use Illuminate\Routing\Controller;
+use Nyholm\Psr7\Request;
+use SushiMarket\Sbertips\Models\ResponseStatus;
 use SushiMarket\Sbertips\Requests\AccessTokenRequest;
 use SushiMarket\Sbertips\Requests\AuthOtpRequest;
 use SushiMarket\Sbertips\Requests\ClientCreateRequest;
@@ -10,6 +12,26 @@ use SushiMarket\Sbertips\Services\SbertipsService\RegisterTip;
 
 class RegisterController extends Controller
 {
+
+    /**
+     * registerStart
+     * @param ClientCreateRequest $request
+     * @return array|mixed
+     */
+    public function registerStart(ClientCreateRequest $request)
+    {
+        return RegisterTip::registerStart($request->all())->json();
+    }
+
+    /**
+     * registerFinish
+     * @param AuthTokenRequest $request
+     * @return mixed
+     */
+    public function registerFinish(AuthTokenRequest $request)
+    {
+        return RegisterTip::registerFinish($request->all())->json();
+    }
 
     /**
      * clientsCreate
