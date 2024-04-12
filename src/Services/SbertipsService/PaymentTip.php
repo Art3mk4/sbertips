@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Validation\ValidationException;
 use SushiMarket\Sbertips\Models\ResponseStatus;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Support\Str;
 
 class PaymentTip extends SberServiceRequest
 {
@@ -59,26 +60,31 @@ class PaymentTip extends SberServiceRequest
             throw new NotFoundHttpException("The courier didn't save the card");
         }
 
-        unset($data['order_id']);
+        $client = $order->client;
+        if (is_null($client) || !$client->sbercard) {
+            throw new NotFoundHttpException("The client didn't save the card: ");
+        }
+
+        $data['transactionNumber'] = Str::uuid()->toString();
+        $data['currency'] = "643";
         $data['qrUuid'] = $riderTip->qrcode_id;
+        $data['binding'] = [
+            'bindingId' => isset($data['binding_id']) ? $data['binding_id'] : $client->sbercard->token,
+            'clientId'  => $client->external_id
+        ];
+
+        unset($data['binding_id']);
+        unset($data['order_id']);
         $registerResponse = self::transferSecureRegister($data);
         if ($registerResponse->json('status') == ResponseStatus::FAIL->value) {
             return $registerResponse;
-        }
-
-        $client = $order->client;
-        if (!$client || !$client->sbercard) {
-            throw new NotFoundHttpException("The client didn't save the card: ");
         }
 
         return self::transferPayment([
             'transactionNumber' => $data['transactionNumber'],
             'qrUuid'            => $data['qrUuid'],
             'source'            => [
-                'binding' => [
-                    'bindingId' => $client->sbercard->token,
-                    'clientId' => $client->external_id
-                ]
+                'binding' => $data['binding']
             ],
             'amount' => [
                 'transactionAmount' => $data['amount'],

@@ -6,7 +6,8 @@ return [
     'merchantPassword' => env('SBERTIPS_MERCHANT_PASSWORD'),
     'version'          => '1.3.8',
     'auth'             => [
-        'bearerToken'  => env('SBERTIPS_API_TOKEN')
+        'bearerToken'  => env('SBERTIPS_API_TOKEN'),
+        'enableLog'    => env('SBERTIPS_API_ENABLE_LOG', false),
     ],
     'models' => [
         'Rider'   => env('SBERTIPS_RIDER_MODEL'),

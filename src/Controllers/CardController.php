@@ -66,9 +66,4 @@ class CardController extends Controller
     {
         return CourierCardTip::list($request->input('accessToken'))->json();
     }
-
-    public function checkOrders(CheckOrdersRequest $request)
-    {
-        return CourierCardTip::checkOrders($request->input('order_ids'));
-    }
 }

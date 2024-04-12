@@ -440,34 +440,19 @@ class RouteTest extends TestCase
         $this->assertEquals($response->json('type'), 'TRANSFER');
     }
 
-    public function test_check_orders_for_tip()
+    public function test_get_settings_for_tip()
     {
         $response = $this->postRequest(
-            'sbertips/check/orders',
+            'sbertips/settings',
             [
-                'order_ids' => [$this->orderModel->id]
+                'order_id' => $this->orderModel->id
             ]
         );
 
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'status',
-            'orders' => [
-                '*' => [
-                    'order_id',
-                    'courier_id',
-                    'sbertip' => [
-                        'id',
-                        'uuid',
-                        'access_token',
-                        'courier_id',
-                        'qrcode_id',
-                        'saved_card',
-                        'created_at',
-                        'updated_at'
-                    ]
-                ]
-            ]
+            'payments'
         ]);
     }
 
@@ -504,7 +489,10 @@ class RouteTest extends TestCase
 
     public function test_sbertips_payment()
     {
-        $response = $this->postRequest('sbertips/transferPayment', $this->getOrderData());
+        $response = $this->postRequest('sbertips/transferPayment', [
+            'order_id' => $this->orderModel->id,
+            'amount'   => $this->faker->numberBetween(10000, 100000)
+        ]);
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'requestId',

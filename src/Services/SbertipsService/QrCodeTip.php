@@ -96,4 +96,29 @@ class QrCodeTip extends SberServiceRequest
                 ->update(['qrcode_id' => $response->json('qrCode.uuid')]);
         }
     }
+
+
+    /**
+     * settings
+     *
+     * @param $data
+     * @return mixed
+     */
+    public static function settings($id)
+    {
+        $order = ModelFactory::getOrderModel()::select([
+            'id as order_id',
+            'CourierID'
+        ])->with('sbertip')->findOrFail($id);
+
+        $settings = self::get([
+            'accessToken' => $order->sbertip->access_token,
+            'uuid' => $order->sbertip->qrcode_id
+        ]);
+
+        return response()->json([
+            'status' => $settings->json('status'),
+            'payments' => $settings->json('qrCode.amounts')
+        ], $settings->status());
+    }
 }

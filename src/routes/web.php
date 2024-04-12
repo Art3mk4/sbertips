@@ -21,13 +21,13 @@ Route::prefix('sbertips')->middleware(['sbertips_auth'])->group(function() {
     Route::post('/qrcode/delete', [QrCodeController::class, 'delete'])->name('qrcodeDelete');
     Route::post('/qrcode/get', [QrCodeController::class, 'get'])->name('qrcodeGet');
     Route::post('/qrcode/list', [QrCodeController::class, 'list'])->name('qrcodeList');
+    Route::post('/settings', [QrCodeController::class, 'settings'])->name('qrcodeSettings');
 
     Route::post('/savecard/start', [CardController::class, 'saveStart'])->name('saveStart');
     Route::post('/savecard/finish', [CardController::class, 'saveFinish'])->name('saveFinish');
     Route::post('/card/list', [CardController::class, 'list'])->name('cardList');
     Route::post('/card/active', [CardController::class, 'active'])->name('cardActive');
     Route::post('/card/delete', [CardController::class, 'delete'])->name('cardDelete');
-    Route::post('/check/orders', [CardController::class, 'checkOrders'])->name('checkOrdersForTip');
 
     Route::post('/transferPayment', [TransferController::class, 'sbertipsPayment'])->name('sbertipsPayment');
     Route::post('/transfer/secure/register', [TransferController::class, 'secureRegister'])->name('secureRegister');

@@ -16,7 +16,7 @@ class CheckOrdersRequest extends BaseAjaxRequest
     public function rules(): array
     {
         return [
-            'order_ids' => 'required|array'
+            'order_id' => 'required|integer'
         ];
     }
 }

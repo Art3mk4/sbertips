@@ -3,6 +3,7 @@ namespace SushiMarket\Sbertips\Controllers;
 
 use Illuminate\Routing\Controller;
 use SushiMarket\Sbertips\Requests\AccessTokenRequest;
+use SushiMarket\Sbertips\Requests\CheckOrdersRequest;
 use SushiMarket\Sbertips\Requests\QrCodeDeleteRequest;
 use SushiMarket\Sbertips\Requests\QrCodeGetRequest;
 use SushiMarket\Sbertips\Requests\QrCodeRequest;
@@ -65,5 +66,10 @@ class QrCodeController extends Controller
     public function list(AccessTokenRequest $request)
     {
         return QrCodeTip::list($request->input('accessToken'))->json();
+    }
+
+    public function settings(CheckOrdersRequest $request)
+    {
+        return QrCodeTip::settings($request->input('order_id'));
     }
 }
