@@ -36,12 +36,12 @@ class SbertipsProvider extends ServiceProvider
             return $riderTipModel->hasOne(RiderTip::class);
         });
 
-        ModelFactory::getOrderModel()::class::resolveRelationUsing('sbertip', function($riderTipModel) {
-            return $riderTipModel->hasOne(RiderTip::class, 'courier_id', 'CourierID');
+        ModelFactory::getOrderModel()::class::resolveRelationUsing('sbertip', function($orderModel) {
+            return $orderModel->hasOne(RiderTip::class, 'courier_id', 'CourierID');
         });
 
-        ModelFactory::getClientModel()::class::resolveRelationUsing('sbercard', function($clientModel) {
-            return $clientModel->hasOne(ModelFactory::getCardModel()::class, 'client_id', 'id');
+        ModelFactory::getOrderModel()::class::resolveRelationUsing('sbercard', function($orderModel) {
+            return $orderModel->hasOne(ModelFactory::getCardModel()::class, 'client_id', 'ClientID');
         });
     }
 }

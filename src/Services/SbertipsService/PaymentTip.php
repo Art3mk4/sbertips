@@ -42,6 +42,7 @@ class PaymentTip extends SberServiceRequest
      */
     public static function transferPayment($data)
     {
+        dump(array_merge(self::getData(), $data));
         return Http::withHeaders(['X-bank-id' => 'GENERAL'])->post(self::getUrl() . 'transfer/payment', array_merge(self::getData(), $data));
     }
 
@@ -53,28 +54,7 @@ class PaymentTip extends SberServiceRequest
      */
     public static function sbertipsPayment($data)
     {
-        $order = ModelFactory::getOrderModel()->findOrFail($data['order_id']);
-        $riderTip = $order->sbertip;
-
-        if (is_null($riderTip) || !$riderTip->saved_card) {
-            throw new NotFoundHttpException("The courier didn't save the card");
-        }
-
-        $client = $order->client;
-        if (is_null($client) || !$client->sbercard) {
-            throw new NotFoundHttpException("The client didn't save the card: ");
-        }
-
-        $data['transactionNumber'] = Str::uuid()->toString();
-        $data['currency'] = "643";
-        $data['qrUuid'] = $riderTip->qrcode_id;
-        $data['binding'] = [
-            'bindingId' => isset($data['binding_id']) ? $data['binding_id'] : $client->sbercard->token,
-            'clientId'  => $client->external_id
-        ];
-
-        unset($data['binding_id']);
-        unset($data['order_id']);
+        $data = self::prepareData($data);
         $registerResponse = self::transferSecureRegister($data);
         if ($registerResponse->json('status') == ResponseStatus::FAIL->value) {
             return $registerResponse;
@@ -93,5 +73,37 @@ class PaymentTip extends SberServiceRequest
             'feeSender' => isset($data['feeSender']) ? $data['feeSender'] : false,
             'ssl' => isset($data['ssl']) ? $data['ssl'] : false
         ]);
+    }
+
+    /**
+     * @param $data
+     * @return mixed
+     */
+    protected static function prepareData($data)
+    {
+        $order = ModelFactory::getOrderModel()->findOrFail($data['order_id']);
+        $riderTip = $order->sbertip;
+
+        if (is_null($riderTip) || !$riderTip->saved_card) {
+            throw new NotFoundHttpException("The courier didn't save the card");
+        }
+
+        $sberCard = $order->sbercard;
+        if (is_null($sberCard)) {
+            throw new NotFoundHttpException("The client didn't save the card: ");
+        }
+
+        $data['transactionNumber'] = Str::random(9);
+        $data['currency'] = "643";
+        $data['qrUuid'] = $riderTip->qrcode_id;
+        $data['binding'] =  [
+            'bindingId' => isset($data['binding_id']) ? $data['binding_id'] : $sberCard->token,
+            'clientId'  => $sberCard->client->external_id
+        ];
+
+        unset($data['binding_id']);
+        unset($data['order_id']);
+
+        return $data;
     }
 }
