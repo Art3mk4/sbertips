@@ -21,7 +21,7 @@ class RegisterTip extends SberServiceRequest
      */
     public static function clientsCreate($data)
     {
-        $response = Http::post(self::getUrl() . 'clients/create', $data);
+        $response = self::class::post(self::getUrl() . 'clients/create', $data);
         if ($response->status() === 200 && $response->json('status') === ResponseStatus::SUCCESS->value) {
             try {
                 RiderTip::create([
@@ -46,7 +46,7 @@ class RegisterTip extends SberServiceRequest
      */
     public static function authOtp($data)
     {
-        return Http::post(self::getUrl() . 'auth/otp', $data);
+        return self::class::post(self::getUrl() . 'auth/otp', $data);
     }
 
     /**
@@ -57,7 +57,7 @@ class RegisterTip extends SberServiceRequest
      */
     public static function authToken($data)
     {
-        $response = Http::post(self::getUrl() . 'auth/token', $data);
+        $response = self::class::post(self::getUrl() . 'auth/token', $data);
         if ($response->status() === 200 && $response->json('status') === ResponseStatus::SUCCESS->value) {
             try {
                 RiderTip::where([
@@ -81,7 +81,7 @@ class RegisterTip extends SberServiceRequest
      */
     public static function clientsInfo($accessToken)
     {
-        return Http::withToken($accessToken)->post(self::getUrl() . 'clients/info');
+        return self::class::withToken($accessToken)->post(self::getUrl() . 'clients/info');
     }
 
     /**

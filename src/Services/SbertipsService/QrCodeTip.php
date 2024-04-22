@@ -18,7 +18,7 @@ class QrCodeTip extends SberServiceRequest
      */
     public static function add($data)
     {
-        $response = Http::withToken($data['accessToken'])->post(self::getUrl() . 'qrcode/add', $data);
+        $response = self::class::withToken($data['accessToken'])->post(self::getUrl() . 'qrcode/add', $data);
         self::updateQrCode($response, $data);
 
         return $response;
@@ -32,7 +32,7 @@ class QrCodeTip extends SberServiceRequest
      */
     public static function update($data)
     {
-        $response = Http::withToken($data['accessToken'])->post(self::getUrl() . 'qrcode/update', $data);
+        $response = self::class::withToken($data['accessToken'])->post(self::getUrl() . 'qrcode/update', $data);
         self::updateQrCode($response, $data);
 
         return $response;
@@ -46,7 +46,7 @@ class QrCodeTip extends SberServiceRequest
      */
     public static function delete($data)
     {
-        return Http::withToken($data['accessToken'])->post(
+        return self::class::withToken($data['accessToken'])->post(
             self::getUrl() . 'qrcode/delete',
             [
                 'uuid' => $data['uuid']
@@ -62,7 +62,7 @@ class QrCodeTip extends SberServiceRequest
      */
     public static function get($data)
     {
-        return Http::withToken($data['accessToken'])->post(
+        return self::class::withToken($data['accessToken'])->post(
             self::getUrl() . 'qrcode/get',
             [
                 'uuid' => $data['uuid']
@@ -79,7 +79,7 @@ class QrCodeTip extends SberServiceRequest
      */
     public static function list($accessToken)
     {
-        return Http::withToken($accessToken)->post(self::getUrl() . 'qrcode/list');
+        return self::class::withToken($accessToken)->post(self::getUrl() . 'qrcode/list');
     }
 
     /**

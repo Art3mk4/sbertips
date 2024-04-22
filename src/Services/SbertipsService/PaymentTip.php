@@ -20,7 +20,7 @@ class PaymentTip extends SberServiceRequest
      */
     public static function transferSecureRegister($data)
     {
-        return Http::withHeaders(['X-bank-id' => 'GENERAL'])->post(self::getUrl() . 'transfer/secure/register', array_merge(self::getData(), $data));
+        return self::class::withHeaders(['X-bank-id' => 'GENERAL'])->post(self::getUrl() . 'transfer/secure/register', array_merge(self::getData(), $data));
     }
 
     /**
@@ -31,7 +31,7 @@ class PaymentTip extends SberServiceRequest
      */
     public static function transferSecureFinish($data)
     {
-        return Http::withHeaders(['X-bank-id' => 'GENERAL'])->post(self::getUrl() . 'transfer/secure/finish', array_merge(self::getData(), $data));
+        return self::class::withHeaders(['X-bank-id' => 'GENERAL'])->post(self::getUrl() . 'transfer/secure/finish', array_merge(self::getData(), $data));
     }
 
     /**
@@ -42,8 +42,7 @@ class PaymentTip extends SberServiceRequest
      */
     public static function transferPayment($data)
     {
-        dump(array_merge(self::getData(), $data));
-        return Http::withHeaders(['X-bank-id' => 'GENERAL'])->post(self::getUrl() . 'transfer/payment', array_merge(self::getData(), $data));
+        return self::class::withHeaders(['X-bank-id' => 'GENERAL'])->post(self::getUrl() . 'transfer/payment', array_merge(self::getData(), $data));
     }
 
     /**

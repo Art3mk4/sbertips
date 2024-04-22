@@ -19,7 +19,7 @@ class CourierCardTip extends SberServiceRequest
      */
     public static function saveStart($data)
     {
-        return Http::withToken($data['accessToken'])->post(self::getUrl() . 'savecard/start', $data);
+        return self::class::withToken($data['accessToken'])->post(self::getUrl() . 'savecard/start', $data);
     }
 
     /**
@@ -30,7 +30,7 @@ class CourierCardTip extends SberServiceRequest
      */
     public static function saveFinish($data)
     {
-        $response = Http::withToken($data['accessToken'])->post(self::getUrl() . 'savecard/finish', $data);
+        $response = self::class::withToken($data['accessToken'])->post(self::getUrl() . 'savecard/finish', $data);
         if ($response->json('status') === ResponseStatus::SUCCESS->value) {
             RiderTip::where('access_token', $data['accessToken'])->update(['saved_card' => true]);
         }
@@ -45,7 +45,7 @@ class CourierCardTip extends SberServiceRequest
      */
     public static function active($data)
     {
-        return Http::withToken($data['accessToken'])->post(self::getUrl() . 'card/active', $data);
+        return self::class::withToken($data['accessToken'])->post(self::getUrl() . 'card/active', $data);
     }
 
     /**
@@ -56,7 +56,7 @@ class CourierCardTip extends SberServiceRequest
      */
     public static function delete($data)
     {
-        return Http::withToken($data['accessToken'])->post(self::getUrl() . 'card/delete', $data);
+        return self::class::withToken($data['accessToken'])->post(self::getUrl() . 'card/delete', $data);
     }
 
     /**
@@ -67,6 +67,6 @@ class CourierCardTip extends SberServiceRequest
      */
     public static function list($accessToken)
     {
-        return Http::withToken($accessToken)->post(self::getUrl() . 'card/list');
+        return self::class::withToken($accessToken)->post(self::getUrl() . 'card/list');
     }
 }
