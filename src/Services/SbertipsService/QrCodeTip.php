@@ -18,6 +18,9 @@ class QrCodeTip extends SberServiceRequest
      */
     public static function add($data)
     {
+        if (!isset($data['teamUuid'])) {
+            $data['teamUuid'] = self::getTeamUuid();
+        }
         $response = self::class::withToken($data['accessToken'])->post(self::getUrl() . 'qrcode/add', $data);
         self::updateQrCode($response, $data);
 

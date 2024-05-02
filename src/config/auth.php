@@ -4,6 +4,7 @@ return [
     'url'              => env('SBERTIPS_URL'),
     'merchantLogin'    => env('SBERTIPS_MERCHANT_LOGIN'),
     'merchantPassword' => env('SBERTIPS_MERCHANT_PASSWORD'),
+    'teamUuid'         => env('SBERTIPS_TEAM_UUID'),
     'version'          => '1.4.2',
     'auth'             => [
         'bearerToken'  => env('SBERTIPS_API_TOKEN'),

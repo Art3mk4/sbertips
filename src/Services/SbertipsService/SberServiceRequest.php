@@ -39,6 +39,14 @@ class SberServiceRequest extends Http
     }
 
     /**
+     * @return string
+     */
+    public static function getTeamUuid():string
+    {
+        return config('sbertips.teamUuid');
+    }
+
+    /**
      * @return array[]
      */
     public static function getData(): array
