@@ -47,6 +47,16 @@ class SberServiceRequest extends Http
     }
 
     /**
+     * isFakePayment
+     *
+     * @return bool
+     */
+    public static function isFakePayment():bool
+    {
+        return config('sbertips.fakePayment');
+    }
+
+    /**
      * @return array[]
      */
     public static function getData(): array

@@ -42,6 +42,13 @@ class PaymentTip extends SberServiceRequest
      */
     public static function transferPayment($data)
     {
+        if (self::isFakePayment()) {
+            self::class::fake([
+                self::getUrl() . 'transfer/payment' => self::class::response(
+                    self::fakeResponse($data['transactionNumber']), 200, ['Content-Type' => 'application/json']
+                )
+            ]);
+        }
         return self::class::withHeaders(['X-bank-id' => 'GENERAL'])->post(self::getUrl() . 'transfer/payment', array_merge(self::getData(), $data));
     }
 
@@ -104,5 +111,26 @@ class PaymentTip extends SberServiceRequest
         unset($data['order_id']);
 
         return $data;
+    }
+
+    /**
+     * @param $transactionNumber
+     * @return array
+     */
+    protected function fakeResponse($transactionNumber): array
+    {
+        return [
+            "requestId"         => Str::uuid()->toString(),
+            "status"            => "SUCCESS",
+            "transactionNumber" => $transactionNumber,
+            "mdOrder"           => Str::uuid()->toString(),
+            "info"              => "Ваш платёж обработан, происходит переадресация...",
+            "redirectUrl"       => null,
+            "paReq"             => null,
+            "transactionState"  => "DEPOSITED",
+            "state"             => "PERFORM_SUCCESS",
+            "type"              => "TRANSFER",
+            "errorMessage"      => null
+        ];
     }
 }
