@@ -6,7 +6,7 @@ return [
     'merchantPassword' => env('SBERTIPS_MERCHANT_PASSWORD'),
     'teamUuid'         => env('SBERTIPS_TEAM_UUID'),
     'fakePayment'      => env('SBERTIPS_FAKE_PAYMENT'),
-    'version'          => '1.4.6',
+    'version'          => '1.4.8',
     'auth'             => [
         'bearerToken'  => env('SBERTIPS_API_TOKEN'),
         'enableLog'    => env('SBERTIPS_API_ENABLE_LOG', false),
