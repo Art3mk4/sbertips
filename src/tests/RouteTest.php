@@ -534,7 +534,6 @@ class RouteTest extends TestCase
     protected function getClientData()
     {
         return [
-            "merchantLogin" => config('sbertips.merchantLogin'),
             "firstName"     => $this->faker('ru_RU')->firstName,
             "lastName"      => $this->faker('ru_RU')->lastName,
             "gender"        => "MALE",

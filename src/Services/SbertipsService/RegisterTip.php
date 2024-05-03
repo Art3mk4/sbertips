@@ -21,6 +21,7 @@ class RegisterTip extends SberServiceRequest
      */
     public static function clientsCreate($data)
     {
+        $data['merchantLogin'] = self::getMerchantLogin();
         $response = self::class::post(self::getUrl() . 'clients/create', $data);
         if ($response->status() === 200 && $response->json('status') === ResponseStatus::SUCCESS->value) {
             try {
@@ -91,6 +92,7 @@ class RegisterTip extends SberServiceRequest
      */
     public static function registerStart($data)
     {
+        $data = self::prepareClient($data);
         $clientCreateResponse = self::clientsCreate($data);
         if ($clientCreateResponse['status'] === ResponseStatus::FAIL->value) {
             return $clientCreateResponse;
@@ -120,5 +122,60 @@ class RegisterTip extends SberServiceRequest
             'jobPosition' => 'jobPosition.courier',
             'company'     => 'sushi-market'
         ]);
+    }
+
+    /**
+     * prepareClient
+     *
+     * @param $data
+     * @return mixed
+     */
+    protected static function prepareClient($data): mixed
+    {
+        $rider = ModelFactory::getRiderModel()::findOrFail($data['courier_id']);
+        if (!isset($data['phone'])) {
+            $data['phone'] = self::preparePhone($rider['phone']);
+        }
+        if (!isset($data['gender'])) {
+            $data['gender'] = self::prepareMale($rider['sex']);
+        }
+        if (!isset($data['firstName'])) {
+            $data['firstName'] = $rider['name'];
+        }
+        if (!isset($data['lastName'])) {
+            $data['lastName'] = $rider['famil'];
+        }
+
+        return $data;
+    }
+
+    /**
+     * preparePhone
+     *
+     * @param $phone
+     * @return string
+     */
+    protected static function preparePhone($phone): string
+    {
+        if (strlen($phone) === 11 ) {
+            return substr($phone, 1);
+        }
+
+        return $phone;
+    }
+
+    /**
+     * prepareMale
+     *
+     * @param $sex
+     * @return string
+     */
+    protected static function prepareMale($sex): string
+    {
+        if ($sex === "female") {
+            return strtoupper($sex);
+        }
+
+        return "MALE";
     }
 }
