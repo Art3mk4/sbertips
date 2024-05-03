@@ -117,13 +117,13 @@ class PaymentTip extends SberServiceRequest
      * @param $transactionNumber
      * @return array
      */
-    protected function fakeResponse($transactionNumber): array
+    protected static function fakeResponse($transactionNumber): array
     {
         return [
             "requestId"         => Str::uuid()->toString(),
             "status"            => "SUCCESS",
             "transactionNumber" => $transactionNumber,
-            "mdOrder"           => Str::uuid()->toString(),
+            "mdOrder"           => Str::random(9),
             "info"              => "Ваш платёж обработан, происходит переадресация...",
             "redirectUrl"       => null,
             "paReq"             => null,
