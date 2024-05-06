@@ -92,7 +92,6 @@ class RegisterTip extends SberServiceRequest
      */
     public static function registerStart($data)
     {
-        $data = self::prepareClient($data);
         $clientCreateResponse = self::clientsCreate($data);
         if ($clientCreateResponse['status'] === ResponseStatus::FAIL->value) {
             return $clientCreateResponse;
@@ -130,7 +129,7 @@ class RegisterTip extends SberServiceRequest
      * @param $data
      * @return mixed
      */
-    protected static function prepareClient($data): mixed
+    public static function prepareClient($data): mixed
     {
         $rider = ModelFactory::getRiderModel()::findOrFail($data['courier_id']);
         if (!isset($data['phone'])) {
@@ -153,9 +152,9 @@ class RegisterTip extends SberServiceRequest
      * preparePhone
      *
      * @param $phone
-     * @return string
+     * @return string|null
      */
-    protected static function preparePhone($phone): string
+    protected static function preparePhone($phone): null|string
     {
         if (strlen($phone) === 11 ) {
             return substr($phone, 1);

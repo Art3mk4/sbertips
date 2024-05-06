@@ -3,6 +3,7 @@
 namespace SushiMarket\Sbertips\Requests;
 
 use SushiMarket\Sbertips\Requests\BaseAjaxRequest;
+use SushiMarket\Sbertips\Services\SbertipsService\RegisterTip;
 
 class ClientRegisterRequest extends BaseAjaxRequest
 {
@@ -28,5 +29,15 @@ class ClientRegisterRequest extends BaseAjaxRequest
             'phone'         => 'string|size:10',
             'courier_id'    => 'required|integer'
         ];
+    }
+
+    /**
+     * prepareForValidation
+     *
+     * @return void
+     */
+    public function prepareForValidation(): void
+    {
+        $this->merge(RegisterTip::prepareClient($this->request->all()));
     }
 }
