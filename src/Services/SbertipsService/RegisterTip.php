@@ -29,7 +29,7 @@ class RegisterTip extends SberServiceRequest
                     'courier_id' => $data['courier_id'],
                     'uuid'       => $response->json('client.uuid')
                 ]);
-            } catch (UniqueConstraintViolationException $e) {
+            } catch (\Exception $e) {
                 RiderTip::where(['courier_id' => $data['courier_id']])->update([
                     'uuid'       => $response->json('client.uuid')
                 ]);
@@ -66,7 +66,7 @@ class RegisterTip extends SberServiceRequest
                 ])->update([
                     'access_token' => $response->json('accessToken')
                 ]);
-            } catch (UniqueConstraintViolationException $e) {
+            } catch (\Exception $e) {
                 Log::error($e->getMessage(), $data);
             }
         }
@@ -115,12 +115,14 @@ class RegisterTip extends SberServiceRequest
             return $authOtpResponse;
         }
 
-        return QrCodeTip::add([
+        $data = [
             'accessToken' => $authOtpResponse['accessToken'],
             'title'       => $authOtpResponse['accessToken'],
             'jobPosition' => 'jobPosition.courier',
             'company'     => 'sushi-market'
-        ]);
+        ];
+        $data = self::checkTeamUuid($data);
+        return QrCodeTip::add($data);
     }
 
     /**
@@ -176,5 +178,21 @@ class RegisterTip extends SberServiceRequest
         }
 
         return "MALE";
+    }
+
+    /**
+     * checkTeamUuid
+     *
+     * @param $data
+     * @return mixed
+     */
+    protected static function checkTeamUuid($data)
+    {
+        $teamUuid = self::getTeamUuid();
+        if ($teamUuid) {
+            $data['teamUuid'] = $teamUuid;
+        }
+
+        return $data;
     }
 }

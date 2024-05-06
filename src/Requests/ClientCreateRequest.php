@@ -21,7 +21,6 @@ class ClientCreateRequest extends BaseAjaxRequest
     public function rules(): array
     {
         return [
-            'merchantLogin' => 'required|string',
             'firstName'     => 'required|string',
             'lastName'      => 'required|string',
             'gender'        => 'string|in:MALE,FEMALE',

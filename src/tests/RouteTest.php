@@ -489,12 +489,10 @@ class RouteTest extends TestCase
 
     public function test_sbertips_payment()
     {
-        dump($this->orderModel->id);
         $response = $this->postRequest('sbertips/transferPayment', [
             'order_id' => 12,
             'amount'   => 10000
         ]);
-        dump($response->json());
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'requestId',
