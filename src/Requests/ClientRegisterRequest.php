@@ -2,11 +2,17 @@
 
 namespace SushiMarket\Sbertips\Requests;
 
+use Illuminate\Http\Request;
 use SushiMarket\Sbertips\Requests\BaseAjaxRequest;
+use SushiMarket\Sbertips\Services\SbertipsService\ModelFactory;
 use SushiMarket\Sbertips\Services\SbertipsService\RegisterTip;
 
 class ClientRegisterRequest extends BaseAjaxRequest
 {
+
+    public function __construct(public Request $baseRequest)
+    {
+    }
 
     /**
      * @return bool
@@ -38,6 +44,10 @@ class ClientRegisterRequest extends BaseAjaxRequest
      */
     public function prepareForValidation(): void
     {
+        $riderToken = ModelFactory::getRiderAccessTokenModel()::where(
+            'token', $this->baseRequest->bearerToken()
+        )->first(['rider_id']);
+        $this->request->add(['courier_id' => $riderToken->rider_id]);
         $this->merge(RegisterTip::prepareClient($this->request->all()));
     }
 }

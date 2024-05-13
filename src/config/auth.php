@@ -12,9 +12,11 @@ return [
         'enableLog'    => env('SBERTIPS_API_ENABLE_LOG', false),
     ],
     'models' => [
-        'Rider'   => env('SBERTIPS_RIDER_MODEL', ''),
-        'Order'   => env('SBERTIPS_ORDER_MODEL', ''),
-        'Card'    => env('SBERTIPS_CARD_MODEL', ''),
-        'Client'  => env('SBERTIPS_CLIENT_MODEL', '')
+        'Rider'            => env('SBERTIPS_RIDER_MODEL', ''),
+        'Order'            => env('SBERTIPS_ORDER_MODEL', ''),
+        'Card'             => env('SBERTIPS_CARD_MODEL', ''),
+        'Client'           => env('SBERTIPS_CLIENT_MODEL', ''),
+        'RiderAccessToken' => env('SBERTIPS_RIDER_ACCESS_TOKEN_MODEL', ''),
+        'AuthMiddleware'   => env('SBERTIPS_AUTH_MIDDLEWARE', 'SbertipsAuthMiddleware::class')
     ]
 ];

@@ -1,6 +1,7 @@
 <?php
 
 namespace SushiMarket\Sbertips\Requests;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use SushiMarket\Sbertips\Models\RiderTip;
 use SushiMarket\Sbertips\Requests\BaseAjaxRequest;
@@ -8,6 +9,10 @@ use SushiMarket\Sbertips\Services\SbertipsService\ModelFactory;
 
 class SaveCardStartRequest extends BaseAjaxRequest
 {
+
+    public function __construct(public Request $baseRequest)
+    {
+    }
 
     /**
      * @return bool
@@ -32,8 +37,7 @@ class SaveCardStartRequest extends BaseAjaxRequest
             "card.cvc"            => "required_with:card|string",
             "returnUrl"           => "required|array",
             "returnUrl.success"   => "required|string",
-            "returnUrl.fail"      => "string",
-            "courier_id"          => "integer"
+            "returnUrl.fail"      => "string"
         ];
     }
 
@@ -44,7 +48,10 @@ class SaveCardStartRequest extends BaseAjaxRequest
      */
     public function prepareForValidation(): void
     {
-        $riderTip = RiderTip::where('courier_id', $this->input('courier_id'))->get()->first();
+        $riderToken = ModelFactory::getRiderAccessTokenModel()::where(
+            'token', $this->baseRequest->bearerToken()
+        )->first(['rider_id']);
+        $riderTip = RiderTip::where('courier_id', $riderToken->rider_id)->get()->first();
         if ($riderTip) {
             $this->merge([
                 'accessToken' => $this->input('accessToken', $riderTip->access_token),

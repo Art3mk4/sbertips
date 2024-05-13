@@ -4,6 +4,7 @@ namespace SushiMarket\Sbertips\Services\SbertipsService;
 use \Illuminate\Config\Repository;
 use \Illuminate\Contracts\Foundation\Application as ContractsFoundationApplication;
 use \Illuminate\Foundation\Application as FoundationApplication;
+use SushiMarket\Sbertips\Middleware\SbertipsAuthMiddleware;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ModelFactory
@@ -33,6 +34,16 @@ class ModelFactory
     public static function getCardModel()
     {
         return self::loadModel('sbertips.models.Card');
+    }
+
+    public static function getRiderAccessTokenModel()
+    {
+        return self::loadModel('sbertips.models.RiderAccessToken');
+    }
+
+    public static function getAuthMiddleware()
+    {
+        return self::loadModel('sbertips.models.AuthMiddleware');
     }
 
     /**
