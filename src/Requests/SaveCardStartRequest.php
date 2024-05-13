@@ -51,6 +51,9 @@ class SaveCardStartRequest extends BaseAjaxRequest
         $riderToken = ModelFactory::getRiderAccessTokenModel()::where(
             'token', $this->baseRequest->bearerToken()
         )->first(['rider_id']);
+        if (!$riderToken) {
+            return;
+        }
         $riderTip = RiderTip::where('courier_id', $riderToken->rider_id)->get()->first();
         if ($riderTip) {
             $this->merge([

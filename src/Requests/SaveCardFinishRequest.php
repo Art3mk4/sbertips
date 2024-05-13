@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use SushiMarket\Sbertips\Models\RiderTip;
 use SushiMarket\Sbertips\Requests\BaseAjaxRequest;
+use SushiMarket\Sbertips\Services\SbertipsService\ModelFactory;
 
 class SaveCardFinishRequest extends BaseAjaxRequest
 {
@@ -44,6 +45,9 @@ class SaveCardFinishRequest extends BaseAjaxRequest
         $riderToken = ModelFactory::getRiderAccessTokenModel()::where(
             'token', $this->baseRequest->bearerToken()
         )->first(['rider_id']);
+        if (!$riderToken) {
+            return;
+        }
         $riderTip = RiderTip::where('courier_id', $riderToken->rider_id)->get()->first();
         if ($riderTip) {
             $this->merge([

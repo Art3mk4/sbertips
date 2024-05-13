@@ -43,6 +43,9 @@ class AuthTokenRequest extends BaseAjaxRequest
         $riderToken = ModelFactory::getRiderAccessTokenModel()::where(
             'token', $this->baseRequest->bearerToken()
         )->first(['rider_id']);
+        if (!$riderToken) {
+            return;
+        }
         $this->request->add(['courier_id' => $riderToken->rider_id]);
         $this->merge(RegisterTip::prepareClient($this->request->all()));
     }
