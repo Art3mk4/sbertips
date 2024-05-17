@@ -2,7 +2,9 @@
 
 namespace SushiMarket\Sbertips\Providers;
 use Illuminate\Support\ServiceProvider;
+use Sbertips\Driver\SbertipsDriver;
 use SushiMarket\Sbertips\Models\RiderTip;
+use SushiMarket\Sbertips\Services\Manager\SbertipsManager;
 use SushiMarket\Sbertips\Services\SbertipsService\ModelFactory;
 
 class SbertipsProvider extends ServiceProvider
@@ -15,6 +17,16 @@ class SbertipsProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/auth.php', 'sbertips');
         app()->register(SbertipsRouteServiceProvider::class);
+        app()->singleton('sbertips', function ($app) {
+            return new SbertipsManager($app);
+        });
+
+        app()->singleton('sbertips.driver', function ($app) {
+            return $app['sbertips']->driver();
+        });
+
+        app()->alias('sbertips.driver', SbertipsDriver::class);
+        app()->alias('sbertips', SbertipsManager::class);
 	}
 
     /**

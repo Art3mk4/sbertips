@@ -19,7 +19,9 @@ class RegisterController extends Controller
      */
     public function registerStart(ClientRegisterRequest $request)
     {
-        return RegisterTip::registerStart($request->all())->json();
+        return app('sbertips.driver')->handle(
+            RegisterTip::registerStart($request->all())->json()
+        );
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace SushiMarket\Sbertips\Requests;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use SushiMarket\Sbertips\Requests\BaseAjaxRequest;
 use SushiMarket\Sbertips\Services\SbertipsService\ModelFactory;
 use SushiMarket\Sbertips\Services\SbertipsService\RegisterTip;
