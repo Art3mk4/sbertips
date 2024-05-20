@@ -5,6 +5,7 @@ use GuzzleHttp\Promise\PromiseInterface;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Validation\ValidationException;
+use SushiMarket\Sbertips\Jobs\PaymentJob;
 use SushiMarket\Sbertips\Models\ResponseStatus;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Support\Str;
@@ -81,11 +82,16 @@ class PaymentTip extends SberServiceRequest
         ]);
     }
 
+    public static function sbertipsPaymentDispatch($data)
+    {
+        PaymentJob::dispatch($data);
+    }
+
     /**
      * @param $data
      * @return mixed
      */
-    protected static function prepareData($data)
+    public static function prepareData($data)
     {
         $order = ModelFactory::getOrderModel()->findOrFail($data['order_id']);
         $riderTip = $order->sbertip;
@@ -117,7 +123,7 @@ class PaymentTip extends SberServiceRequest
      * @param $transactionNumber
      * @return array
      */
-    protected static function fakeResponse($transactionNumber): array
+    public static function fakeResponse($transactionNumber): array
     {
         return [
             "requestId"         => Str::uuid()->toString(),

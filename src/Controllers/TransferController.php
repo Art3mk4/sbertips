@@ -46,6 +46,8 @@ class TransferController extends Controller
 
     public function sbertipsPayment(SbertipsPaymentRequest $request)
     {
-        return PaymentTip::sbertipsPayment($request->all())->json();
+        $data = PaymentTip::prepareData($request->all());
+        PaymentTip::sbertipsPaymentDispatch($data);
+        return PaymentTip::fakeResponse($data['transactionNumber']);
     }
 }
