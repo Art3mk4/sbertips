@@ -1,8 +1,11 @@
 <?php
 
 namespace SushiMarket\Sbertips\Providers;
+use App\Models\RiderAccessToken;
 use Illuminate\Support\ServiceProvider;
+use Sbertips\Driver\SbertipsDriver;
 use SushiMarket\Sbertips\Models\RiderTip;
+use SushiMarket\Sbertips\Services\Manager\TipsManager;
 use SushiMarket\Sbertips\Services\SbertipsService\ModelFactory;
 
 class SbertipsProvider extends ServiceProvider
@@ -15,6 +18,16 @@ class SbertipsProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/auth.php', 'sbertips');
         app()->register(SbertipsRouteServiceProvider::class);
+        app()->singleton('sbertips', function ($app) {
+            return new TipsManager($app);
+        });
+
+        app()->singleton('sbertips.driver', function ($app) {
+            return $app['sbertips']->driver();
+        });
+
+        app()->alias('sbertips.driver', SbertipsDriver::class);
+        app()->alias('sbertips', TipsManager::class);
 	}
 
     /**
@@ -33,7 +46,11 @@ class SbertipsProvider extends ServiceProvider
     protected function loadRelations()
     {
         ModelFactory::getRiderModel()::class::resolveRelationUsing('sbertip', function($riderTipModel) {
-            return $riderTipModel->hasOne(RiderTip::class);
+            return $riderTipModel->hasOne(RiderTip::class, 'courier_id', 'id');
+        });
+
+        ModelFactory::getRiderAccessTokenModel()::class::resolveRelationUsing('rider', function($riderModel) {
+            return $riderModel->hasOne(ModelFactory::getRiderModel()::class, 'id', 'rider_id');
         });
 
         ModelFactory::getOrderModel()::class::resolveRelationUsing('sbertip', function($orderModel) {

@@ -2,6 +2,7 @@
 
 namespace SushiMarket\Sbertips\Requests;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use SushiMarket\Sbertips\Requests\BaseAjaxRequest;
 use SushiMarket\Sbertips\Services\SbertipsService\ModelFactory;
 use SushiMarket\Sbertips\Services\SbertipsService\RegisterTip;
@@ -46,7 +47,10 @@ class AuthTokenRequest extends BaseAjaxRequest
         if (!$riderToken) {
             return;
         }
-        $this->request->add(['courier_id' => $riderToken->rider_id]);
+
+        $this->request->add([
+            'courier_id' => $riderToken->rider_id
+        ]);
         $this->merge(RegisterTip::prepareClient($this->request->all()));
     }
 }
