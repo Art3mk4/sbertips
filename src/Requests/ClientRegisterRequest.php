@@ -10,10 +10,6 @@ use SushiMarket\Sbertips\Services\SbertipsService\RegisterTip;
 class ClientRegisterRequest extends BaseAjaxRequest
 {
 
-    public function __construct(public Request $baseRequest)
-    {
-    }
-
     /**
      * @return bool
      */
@@ -50,6 +46,7 @@ class ClientRegisterRequest extends BaseAjaxRequest
         if (!$riderToken) {
             return;
         }
+
         $this->request->add(['courier_id' => $riderToken->rider_id]);
         $this->merge(RegisterTip::prepareClient($this->request->all()));
     }

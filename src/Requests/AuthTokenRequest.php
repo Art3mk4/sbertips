@@ -47,7 +47,10 @@ class AuthTokenRequest extends BaseAjaxRequest
         if (!$riderToken) {
             return;
         }
-        $this->request->add(['courier_id' => $riderToken->rider_id]);
+
+        $this->request->add([
+            'courier_id' => $riderToken->rider_id
+        ]);
         $this->merge(RegisterTip::prepareClient($this->request->all()));
     }
 }

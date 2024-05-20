@@ -1,4 +1,5 @@
 <?php
+
 namespace SushiMarket\Sbertips\Services\SbertipsService;
 
 use Illuminate\Database\UniqueConstraintViolationException;
@@ -27,11 +28,13 @@ class RegisterTip extends SberServiceRequest
             try {
                 RiderTip::create([
                     'courier_id' => $data['courier_id'],
-                    'uuid'       => $response->json('client.uuid')
+                    'uuid' => $response->json('client.uuid'),
+                    'access_code' => $response->json('accessCode')
                 ]);
             } catch (\Exception $e) {
                 RiderTip::where(['courier_id' => $data['courier_id']])->update([
-                    'uuid'       => $response->json('client.uuid')
+                    'uuid' => $response->json('client.uuid'),
+                    'access_code' => $response->json('accessCode'),
                 ]);
             }
         }
@@ -64,7 +67,8 @@ class RegisterTip extends SberServiceRequest
                 RiderTip::where([
                     'courier_id' => $data['courier_id']
                 ])->update([
-                    'access_token' => $response->json('accessToken')
+                    'access_token' => $response->json('accessToken'),
+                    'access_code' => null
                 ]);
             } catch (\Exception $e) {
                 Log::error($e->getMessage(), $data);
@@ -99,7 +103,7 @@ class RegisterTip extends SberServiceRequest
 
         return RegisterTip::authOtp([
             'merchantLogin' => config('sbertips.merchantLogin'),
-            'uuid'          => $clientCreateResponse['client']['uuid']
+            'uuid' => $clientCreateResponse['client']['uuid']
         ]);
     }
 
@@ -117,9 +121,9 @@ class RegisterTip extends SberServiceRequest
 
         $data = [
             'accessToken' => $authOtpResponse['accessToken'],
-            'title'       => $authOtpResponse['accessToken'],
+            'title' => $authOtpResponse['accessToken'],
             'jobPosition' => 'jobPosition.courier',
-            'company'     => 'sushi-market'
+            'company' => 'sushi-market'
         ];
         $data = self::checkTeamUuid($data);
         return QrCodeTip::add($data);
@@ -146,6 +150,12 @@ class RegisterTip extends SberServiceRequest
         if (!isset($data['lastName'])) {
             $data['lastName'] = $rider['famil'];
         }
+        if (!isset($data['email'])) {
+            $data['email'] = $rider['email'];
+        }
+        if (!isset($data['accessCode'])) {
+            $data['accessCode'] = isset($rider->sbertip) ? $rider->sbertip->access_code : '';
+        }
 
         return $data;
     }
@@ -158,7 +168,7 @@ class RegisterTip extends SberServiceRequest
      */
     protected static function preparePhone($phone): null|string
     {
-        if (strlen($phone) === 11 ) {
+        if (strlen($phone) === 11) {
             return substr($phone, 1);
         }
 
