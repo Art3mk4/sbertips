@@ -2,6 +2,7 @@
 
 namespace SushiMarket\Sbertips\Services\Manager;
 
+use Closure;
 use GuzzleHttp\Exception\InvalidArgumentException;
 use Illuminate\Support\Manager;
 use SushiMarket\Sbertips\Driver\SbertipsDriver;

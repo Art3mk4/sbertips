@@ -2,10 +2,7 @@
 namespace SushiMarket\Sbertips\Driver;
 
 use Illuminate\Contracts\Http\Kernel;
-use App\Services\Auth;
 use SushiMarket\Sbertips\Models\ResponseStatus;
-use SushiMarket\Sbertips\Models\RiderTip;
-use SushiMarket\Sbertips\Sbertips;
 
 class SbertipsDriver implements Kernel
 {
@@ -49,6 +46,13 @@ class SbertipsDriver implements Kernel
             'message'       => 'success',
             'new_otp_delay' => $data["newOtpDelay"],
             'attempts_left' => $data["attemptsLeft"]
+        ];
+    }
+
+    protected function clientRegisterFinish($data)
+    {
+        return [
+            'message'       => 'success',
         ];
     }
 }
